@@ -1,0 +1,38 @@
+{
+    "Version": "2012-10-17",
+    "Id": "auto-s3-2",
+    "Statement": [
+        {
+            "Sid": "Allow access to Lambda exe roles to be able to access S3 bucket (which is using this KMS key for encryption)",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": [
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:DescribeKey",
+                "kms:Decrypt"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "ForAnyValue:StringEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::<aws-account-id>:role/lambda-exec-role",
+                        "arn:aws:iam::<aws-account-id>:role/api-devs-*"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "Allow administration of the key",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::<aws-account-id>:role/administrator"
+            },
+            "Action": "kms:*",
+            "Resource": "*"
+        }
+    ]
+}
