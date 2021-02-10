@@ -1,0 +1,16 @@
+{
+  "Version":"2012-10-17",
+  "Id":"Restrict access to s3",
+  "Statement":[
+    {
+      "Sid":"Allow get requests originating from <your-website>.com.",
+      "Effect":"Allow",
+      "Principal":"*",
+      "Action":["s3:GetObject","s3:GetObjectVersion"],
+      "Resource":"arn:aws:s3:::YOUR-BUCKET/*",
+      "Condition":{
+        "StringLike":{"aws:Referer":["http://www.<your-website>/*","http://<your-website>/*"]}
+      }
+    }
+  ]
+}
